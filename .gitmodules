@@ -1,0 +1,3 @@
+[submodule "src/lsif/backward-cpp"]
+	path = src/lsif/backward-cpp
+	url = https://github.com/bombela/backward-cpp.git
