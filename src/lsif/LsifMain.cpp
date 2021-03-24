@@ -82,8 +82,7 @@ public:
         IndexOpts.SystemSymbolFilter =
                 clang::index::IndexingOptions::SystemSymbolFilterKind::All;
         return createStaticIndexingAction(
-                Opts, IndexOpts,
-                [&](clang::clangd::SymbolSlab S) {
+                Opts, [&](clang::clangd::SymbolSlab S) {
                     // Merge as we go.
                     std::lock_guard<std::mutex> Lock(SymbolsMu);
                     for (const auto &Sym : S) {
@@ -152,7 +151,10 @@ int main(int argc, const char **argv) {
 
     ProjectRoot = clang::clangd::URI("file", "", ProjectRoot).toString();
 
-    std::cout << "Project Root: " << ProjectRoot;
+    if (true) {
+        std::cout << "Project Root: " << ProjectRoot;
+        return 0;
+    }
 
     if (DebugArg) {
         llvm::errs() << "Using project root " << ProjectRoot << "\n";
@@ -191,9 +193,9 @@ int main(int argc, const char **argv) {
         if (FileErr.value() != 0) {
             report_fatal_error(FileErr.message());
         }
-        writeLSIF(Out, IndexOstream);
+        // writeLSIF(Out, IndexOstream);
     } else {
-        writeLSIF(Out, outs());
+        // writeLSIF(Out, outs());
     }
 
     return 0;
