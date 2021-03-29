@@ -10,7 +10,12 @@ set(CMAKE_BUILD_TYPE RelWithDebInfo)
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -DNDEBUG -g")
 set(LLVM_ENABLE_PROJECTS "clang;clang-tools-extra")
 
+message(STATUS "LLVM Repo: ${LLVM_REPO_DIR}")
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories("${LLVM_REPO_DIR}")
+include_directories("${LLVM_REPO_DIR}/clang-tools-extra/clangd/")
+
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 if (PATH_TO_LLVM)

@@ -1,132 +1,16 @@
-add_library(ClangLSIF
-  lsif/LsifMain.cpp
-  )
-  # AST.cpp
-  # Cancellation.cpp
-  # ClangdLSPServer.cpp
-  # ClangdServer.cpp
-  # CodeComplete.cpp
-  # CodeCompletionStrings.cpp
-  # CompileCommands.cpp
-  # Compiler.cpp
-  # Context.cpp
-  # Diagnostics.cpp
-  # DraftStore.cpp
-  # ExpectedTypes.cpp
-  # FindSymbols.cpp
-  # FindTarget.cpp
-  # FileDistance.cpp
-  # Format.cpp
-  # FS.cpp
-  # FSProvider.cpp
-  # FormattedString.cpp
-  # FuzzyMatch.cpp
-  # GlobalCompilationDatabase.cpp
-  # Headers.cpp
-  # HeaderSourceSwitch.cpp
-  # Hover.cpp
-  # IncludeFixer.cpp
-  # JSONTransport.cpp
-  # Logger.cpp
-  # PathMapping.cpp
-  # Protocol.cpp
-  # Quality.cpp
-  # ParsedAST.cpp
-  # Preamble.cpp
-  # RIFF.cpp
-  # Selection.cpp
-  # SemanticHighlighting.cpp
-  # SemanticSelection.cpp
-  # Shutdown.cpp
-  # SourceCode.cpp
-  # QueryDriverDatabase.cpp
-  # Threading.cpp
-  # Trace.cpp
-  # TUScheduler.cpp
-  # URI.cpp
-  # XRefs.cpp
+add_executable(lsif-clang LsifMain.cpp ${BACKWARD_ENABLE})
 
-  # index/Background.cpp
-  # index/BackgroundIndexLoader.cpp
-  # index/BackgroundIndexStorage.cpp
-  # index/BackgroundQueue.cpp
-  # index/BackgroundRebuild.cpp
-  # index/CanonicalIncludes.cpp
-  # index/FileIndex.cpp
-  # index/Index.cpp
-  # index/IndexAction.cpp
-  # index/LSIFSerialization.cpp
-  # index/MemIndex.cpp
-  # index/Merge.cpp
-  # index/Ref.cpp
-  # index/Relation.cpp
-  # index/Serialization.cpp
-  # index/Symbol.cpp
-  # index/SymbolCollector.cpp
-  # index/SymbolID.cpp
-  # index/SymbolLocation.cpp
-  # index/SymbolOrigin.cpp
-  # index/YAMLSerialization.cpp
+install(TARGETS lsif-clang)
 
-  # index/dex/Dex.cpp
-  # index/dex/Iterator.cpp
-  # index/dex/PostingList.cpp
-  # index/dex/Trigram.cpp
 
-  # refactor/Rename.cpp
-  # refactor/Tweak.cpp
-  # )
+# LLVM Dependencies
+# target_include_directories(lsif-clang PUBLIC "/home/tjdevries/.cache/lsif-clang/llvm-project/")
+# target_include_directories(lsif-clang PUBLIC "/home/tjdevries/.cache/lsif-clang/llvm-project/clang-tools-extra/clangd/")
+target_link_libraries(lsif-clang stdc++)
+target_link_libraries(lsif-clang clangDaemon)
 
-set(CLANGD_ATOMIC_LIB "")
-if(NOT HAVE_CXX_ATOMICS64_WITHOUT_LIB)
-  list(APPEND CLANGD_ATOMIC_LIB "atomic")
-endif()
+# Backwards CPP Installation.
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/backward-cpp)
 
- set(CLANG_DAEMON_LIBS
-   clangAST
-   clangASTMatchers
-   clangBasic
-   clangDriver
-   clangFormat
-   clangFrontend
-   clangIndex
-   clangLex
-   clangSema
-   clangSerialization
-   # clangTidy
-   clangTooling
-   clangToolingCore
-   clangToolingInclusions
-   clangToolingRefactoring
-   clangToolingSyntax
-   ${LLVM_PTHREAD_LIB}
-   # ${CLANGD_ATOMIC_LIB}
-   ${ALL_CLANG_TIDY_CHECKS}
- )
-  
-
- if (LLVM IN_LIST LLVM_AVAILABLE_LIBS)
-   target_link_libraries(ClangLSIF
-     LLVM
-     ${CLANG_DAEMON_LIBS}
-   )
- else()
-   target_link_libraries(ClangLSIF
-     LLVMSupport
-     ${CLANG_DAEMON_LIBS}
-   )
- endif()
-
-# add_subdirectory(refactor/tweaks)
-# add_subdirectory(tool)
-add_subdirectory(lsif)
-# add_subdirectory(index/dex/dexp)
-
-if (LLVM_INCLUDE_BENCHMARKS)
-  add_subdirectory(benchmarks)
-endif()
-
-if(CLANG_INCLUDE_TESTS)
-add_subdirectory(test)
-add_subdirectory(unittests)
-endif()
+add_backward(lsif-clang)

@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "lsif/LsifSerialization.h"
+// #include "LsifSerialization.h"
 
 #include "clang-tools-extra/clangd/URI.h"
 #include "clang-tools-extra/clangd/index/Serialization.h"
