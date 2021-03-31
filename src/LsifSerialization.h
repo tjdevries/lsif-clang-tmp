@@ -11,10 +11,28 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "clang-tools-extra/clangd/Headers.h"
+#include "clang-tools-extra/clangd/index/Index.h"
+#include "clang-tools-extra/clangd/index/Serialization.h"
+#include "clang-tools-extra/clangd/index/Symbol.h"
+#include "clang/Tooling/CompilationDatabase.h"
 #include "clang-tools-extra/clangd/index/Serialization.h"
 
+
 namespace clang {
-namespace clangd {
-  void writeLSIF(const IndexFileOut &O, llvm::raw_ostream &OS);
-}// namespace clangd
+    namespace clangd {
+        struct LsifIndexFile : clang::clangd::IndexFileOut {
+            std::string ProjectRoot = "";
+            bool Debug = false;
+            bool DebugFiles = false;
+
+            LsifIndexFile() = default;
+            LsifIndexFile(const IndexFileIn &I, std::string project_root) : IndexFileOut(I) {
+                ProjectRoot = project_root;
+            }
+
+        };
+
+        void writeLSIF(const LsifIndexFile &O, llvm::raw_ostream &OS);
+    }// namespace clangd
 }// namespace clang

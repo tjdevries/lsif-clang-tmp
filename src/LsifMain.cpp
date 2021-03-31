@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-// #include "LsifSerialization.h"
+#include "LsifSerialization.h"
 
 #include "clang-tools-extra/clangd/URI.h"
 #include "clang-tools-extra/clangd/index/Serialization.h"
@@ -151,11 +151,6 @@ int main(int argc, const char **argv) {
 
     ProjectRoot = clang::clangd::URI("file", "", ProjectRoot).toString();
 
-    if (true) {
-        std::cout << "Project Root: " << ProjectRoot;
-        return 0;
-    }
-
     if (DebugArg) {
         llvm::errs() << "Using project root " << ProjectRoot << "\n";
     }
@@ -178,7 +173,8 @@ int main(int argc, const char **argv) {
     }
 
     // Emit collected data.
-    clang::clangd::IndexFileOut Out(Data);
+    //  clang::clangd::IndexFileOut Out(Data);
+    LsifIndexFile Out(Data, ProjectRoot);
 
     // TODO(teej): Determine if this is a hack or not...
     Out.Format = (IndexFileFormat) ExtendedIndexFileFormat::LSIF;
@@ -193,9 +189,9 @@ int main(int argc, const char **argv) {
         if (FileErr.value() != 0) {
             report_fatal_error(FileErr.message());
         }
-        // writeLSIF(Out, IndexOstream);
+        writeLSIF(Out, IndexOstream);
     } else {
-        // writeLSIF(Out, outs());
+        writeLSIF(Out, outs());
     }
 
     return 0;

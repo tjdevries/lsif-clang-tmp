@@ -10,6 +10,10 @@ set(CMAKE_BUILD_TYPE RelWithDebInfo)
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -DNDEBUG -g")
 set(LLVM_ENABLE_PROJECTS "clang;clang-tools-extra")
 
+if(NOT LLVM_REPO_DIR)
+  set(LLVM_REPO_DIR "/home/tjdevries/git/llvm-project")
+endif()
+
 message(STATUS "LLVM Repo: ${LLVM_REPO_DIR}")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -40,4 +44,20 @@ message(STATUS "Using ClangConfig.cmake in: ${CLANG_CMAKE_DIR}")
 
 include_directories(${LLVM_INCLUDE_DIRS})
 
-add_subdirectory(src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
+add_executable(lsif-clang
+        src/LsifMain.cpp
+        src/LsifSerialization.cpp
+        ${BACKWARD_ENABLE})
+
+# LLVM Dependencies
+# target_include_directories(lsif-clang PUBLIC "/home/tjdevries/.cache/lsif-clang/llvm-project/")
+# target_include_directories(lsif-clang PUBLIC "/home/tjdevries/.cache/lsif-clang/llvm-project/clang-tools-extra/clangd/")
+target_link_libraries(lsif-clang stdc++)
+target_link_libraries(lsif-clang clangDaemon)
+
+# Backwards CPP Installation.
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/vendored/backward-cpp)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendored/backward-cpp)
+
+add_backward(lsif-clang)
