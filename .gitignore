@@ -6,5 +6,5 @@ build/
 bin/
 cmake-build-debug/
 
-dump.lsif
+*.lsif
 compile_commands.json

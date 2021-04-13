@@ -48,6 +48,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
 add_executable(lsif-clang
         src/LsifMain.cpp
         src/LsifSerialization.cpp
+        src/LsifMerge.cpp
+        src/LsifIndexAction.cpp
         ${BACKWARD_ENABLE})
 
 # LLVM Dependencies
